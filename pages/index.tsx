@@ -3,10 +3,12 @@ import { useState } from "react";
 import axios from "axios";
 import styles from "../styles/Home.module.css";
 import apis from "../apis";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const loginRequest = (username: string, password: string) => {
     const userData = { username, password };
@@ -15,6 +17,7 @@ const Home: NextPage = () => {
       .then((res) => {
         if (res.data.status == "succeed") {
           localStorage.setItem("TOKEN", res.data.TOKEN);
+          router.push("/send");
         }
       })
       .catch((err) => {
