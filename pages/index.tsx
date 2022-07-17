@@ -2,21 +2,24 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import axios from "axios";
 import styles from "../styles/Home.module.css";
+import apis from "../apis";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const loginRequest = (username: string, password: string) => {
-    const requestData = {
-      username,
-      password,
-    };
-    console.log(requestData);
+    const userData = { username, password };
     axios
-      .post("https://lazpserver.herokuapp.com/auth/", requestData)
+      .post(`${apis.Host}${apis.Auth}`, userData)
       .then((res) => {
-        console.log(res.data);
+        if (res.data.status == "succeed") {
+          localStorage.setItem("TOKEN", res.data.TOKEN);
+        }
+      })
+      .catch((err) => {
+        const errData = err.response.data;
+        alert(errData.err);
       });
   };
 
